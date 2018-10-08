@@ -1,0 +1,18 @@
+body {
+    background-color: slategray;
+}
+
+div {
+    background-color: gray;
+}
+
+btn btn-primary {
+    font-size: 0.75em;
+    height:5%;
+    width:8%;
+}
+
+#Submit-Buttons {
+    height:5%;
+    width:8%;
+}

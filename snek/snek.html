@@ -1,0 +1,138 @@
+<head>
+    <link rel="Stylesheet" type="text/css" href="snek.css"/>
+</head>
+<div id="Menu">
+    <h1>Snek</h1>
+    <h3>Points: <span id="points">-</span></h3>
+    <h3>Lives: <span id="lives">-</span></h3>
+
+    <h3>Leaderboards</h3>
+    <li>500 VIN</li>
+
+
+    <h6>Time: <span id="clock"></span></h6>
+</div>
+<canvas id="gc" width="600" height="600" onkeypress="game()"></canvas>
+<script>
+
+/**/
+
+
+    var myVar = setInterval(myTimer, 100);
+    function myTimer() {
+    var d = new Date();
+    document.getElementById("clock").innerHTML = d.toLocaleTimeString();
+    }
+
+    var myVar2 = setInterval(myTimer2, 100);
+    function myTimer2(){
+    var e = lives
+    document.getElementById("lives").innerHTML = e;
+    }
+
+    var myVar3 = setInterval(myTimer3, 100);
+    function myTimer3(){
+    var f = tail*10;
+    document.getElementById("points").innerHTML = f;
+    }
+
+    function stopGame(message) {
+        alert("You ended with " + tail*10 + " points");
+
+    }
+
+    window.onload=function() {
+        canv=document.getElementById('gc');
+        ctx=canv.getContext("2d");
+        document.addEventListener("keydown",keyPush);
+        setInterval(game,1000/40);
+    }
+
+    px=py=15;
+    gs=tc=25;
+    ax=5,ay=10;
+    xv=yv=1;
+    trail=[];
+    tail=5;
+    lives=5;
+
+    function game() {
+        if(lives<=0){
+        document.getElementById("lives").innerHTML = "0";
+        stopGame(lives)
+        lives=0;
+        location.reload();
+        }
+
+        px+=xv;
+        py+=yv;
+        if(px<=0){
+            px=tc-1;
+        }
+        if(px>=tc-1){
+            px=0;
+        }
+        if(py<=0){
+            py=tc-1;
+        }
+        if(py>=tc-1){
+            py=0;
+        }
+
+        if (ax < 0 || ax >= gs || ay < 0 || ay >= tc) {
+            stopGame('wall collision');
+        return;
+        }
+
+        for (var i = tail - 1; i >= 0; --i) {
+            if (trail[i] == ax && trail[i] ==ay) {
+            stopGame('self-collision');
+            return;
+            }
+        }
+
+        ctx.fillStyle="black";
+        ctx.fillRect(0,0,canv.width,canv.height);
+
+        ctx.fillStyle="lime";
+        for(var i=0;i<trail.length;i++){
+            ctx.fillRect(trail[i].x*gs,trail[i].y*gs,gs-2,gs-2);
+            if(trail[i].x==px && trail[i].y==py){
+                tail=5;
+                lives--;
+                trail[i].x++;
+            }
+            
+        }
+        trail.push({x:px,y:py});
+        while(trail.length>tail) {
+            trail.shift();
+        }
+
+        if(ax==px && ay==py){
+            tail++;
+            ax=Math.floor(Math.random()*tc);
+            ay=Math.floor(Math.random()*tc);
+        }
+        ctx.fillStyle="red"
+        ctx.fillRect(ax*gs,ay*gs,gs-2,gs-2);
+    }
+
+function keyPush(evt){
+    switch(evt.keyCode) {
+        case 37:
+            xv=-1,yv=0;
+            break;
+        case 38: 
+            xv=0,yv=-1;
+            break;
+        case 39:
+            xv=1;yv=0;
+            break;
+        case 40: 
+            xv=0;yv=1;
+            break;
+    }
+ }
+
+</script>
